@@ -644,9 +644,13 @@ int main (int argc, char *argv[]) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     // Create and open a window
+
+    char windowName[128];
+    snprintf(windowName, sizeof windowName, "ezview - '%s'", inputFname);
+
     window = glfwCreateWindow(640,
                               480,
-                              "Hello World",
+                              windowName,
                               NULL,
                               NULL);
 
