@@ -603,6 +603,12 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
         ScaleTo[1] = 0;
 }
 
+void tween(float *currentValues, float *newValues, int totalEntries)
+{
+    for (totalEntries--; totalEntries >= 0; totalEntries--)
+        currentValues[totalEntries] += (newValues[totalEntries] - currentValues[totalEntries]) * 0.1;
+}
+
 /**
  * The main enchilada, do all the things!
  */
@@ -726,6 +732,11 @@ int main (int argc, char *argv[]) {
 
     // Repeat
     while (!glfwWindowShouldClose(window)) {
+
+        tween(Scale, ScaleTo, 2);
+        tween(Translation, TranslationTo, 2);
+        tween(Shear, ShearTo, 2);
+        tween(&Rotation, &RotationTo, 1);
 
         glUniform2f(scale_slot, Scale[0], Scale[1]);
         glUniform2f(translation_slot, Translation[0], Translation[1]);
