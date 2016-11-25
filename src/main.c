@@ -505,7 +505,104 @@ static void error_callback(int error, const char* description) {
 }
 
 
-int main(void) {
+float ScaleTo[] = { 1.0, 1.0 };
+float Scale[] = { 1.0, 1.0 };
+float ShearTo[] = { 0.0, 0.0 };
+float Shear[] = { 0.0, 0.0 };
+float TranslationTo[] = { 0.0, 0.0 };
+float Translation[] = { 0, 0 };
+float RotationTo = 0;
+float Rotation = 0;
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+        switch (key) {
+            case GLFW_KEY_UP:
+                ScaleTo[0] += 0.5;
+                ScaleTo[1] += 0.5;
+                break;
+            case GLFW_KEY_DOWN:
+                ScaleTo[0] -= 0.5;
+                ScaleTo[1] -= 0.5;
+                if (ScaleTo[0] < 0)
+                    ScaleTo[0] = 0;
+                if (ScaleTo[1] < 0)
+                    ScaleTo[1] = 0;
+                break;
+            case GLFW_KEY_T:
+                ScaleTo[1] += 0.5;
+                break;
+            case GLFW_KEY_G:
+                ScaleTo[1] -= 0.5;
+                if (ScaleTo[1] < 0)
+                    ScaleTo[1] = 0;
+            case GLFW_KEY_H:
+                ScaleTo[0] += 0.5;
+                break;
+            case GLFW_KEY_F:
+                ScaleTo[0] -= 0.5;
+                if (ScaleTo[0] < 0)
+                    ScaleTo[0] = 0;
+                break;
+            case GLFW_KEY_A:
+                TranslationTo[0] -= 0.5;
+                break;
+            case GLFW_KEY_D:
+                TranslationTo[0] += 0.5;
+                break;
+            case GLFW_KEY_S:
+                TranslationTo[1] -= 0.5;
+                break;
+            case GLFW_KEY_W:
+                TranslationTo[1] += 0.5;
+                break;
+            case GLFW_KEY_E:
+                RotationTo += 0.1;
+                break;
+            case GLFW_KEY_Q:
+                RotationTo -= 0.1;
+                break;
+            case GLFW_KEY_J:
+                ShearTo[0] += 0.1;
+                break;
+            case GLFW_KEY_L:
+                ShearTo[0] -= 0.1;
+                break;
+            case GLFW_KEY_I:
+                ShearTo[1] -= 0.1;
+                break;
+            case GLFW_KEY_K:
+                ShearTo[1] += 0.1;
+                break;
+            case GLFW_KEY_R:
+                ScaleTo[0] = 1.0;
+                ScaleTo[1] = 1.0;
+                ShearTo[0] = 0.0;
+                ShearTo[1] = 0.0;
+                TranslationTo[0] = 0.0;
+                TranslationTo[1] = 0.0;
+                RotationTo = 0;
+                break;
+        }
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    ScaleTo[0] += yoffset * 0.5;
+    ScaleTo[1] += yoffset * 0.5;
+
+    if (ScaleTo[0] < 0)
+        ScaleTo[0] = 0;
+    if (ScaleTo[1] < 0)
+        ScaleTo[1] = 0;
+}
+
 
     Image image;
     load_image(&image, "test.ppm");
@@ -600,6 +697,9 @@ int main(void) {
                           sizeof(Vertex),
                           (GLvoid*) (sizeof(float) * 7));
 
+    glfwSetKeyCallback(window, key_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
+    glfwSetScrollCallback(window, scroll_callback);
 
     // Repeat
     while (!glfwWindowShouldClose(window)) {
