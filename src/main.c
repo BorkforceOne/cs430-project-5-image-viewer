@@ -611,6 +611,10 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
     GLuint color_slot;
     GLuint position_slot;
     GLuint texcoord_slot;
+    GLuint scale_slot;
+    GLuint translation_slot;
+    GLuint rotation_slot;
+    GLuint shear_slot;
     GLuint vertex_buffer;
     GLuint index_buffer;
     GLuint tex;
@@ -646,14 +650,15 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
     glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
     position_slot = glGetAttribLocation(program_id, "Position");
     color_slot = glGetAttribLocation(program_id, "SourceColor");
     texcoord_slot = glGetAttribLocation(program_id, "SourceTexcoord");
+    scale_slot = glGetUniformLocation(program_id, "Scale");
+    translation_slot = glGetUniformLocation(program_id, "Translation");
+    rotation_slot = glGetUniformLocation(program_id, "Rotation");
+    shear_slot = glGetUniformLocation(program_id, "Shear");
     glEnableVertexAttribArray(position_slot);
     glEnableVertexAttribArray(color_slot);
     glEnableVertexAttribArray(texcoord_slot);
@@ -703,6 +708,11 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
     // Repeat
     while (!glfwWindowShouldClose(window)) {
+
+        glUniform2f(scale_slot, Scale[0], Scale[1]);
+        glUniform2f(translation_slot, Translation[0], Translation[1]);
+        glUniform2f(shear_slot, Shear[0], Shear[1]);
+        glUniform1f(rotation_slot, Rotation);
 
         glClearColor(0, 0.0, 0.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT);
