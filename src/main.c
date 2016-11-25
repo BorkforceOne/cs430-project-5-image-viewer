@@ -603,9 +603,23 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
         ScaleTo[1] = 0;
 }
 
+/**
+ * The main enchilada, do all the things!
+ */
+int main (int argc, char *argv[]) {
+    if (argc != 2) {
+        fprintf(stderr, "Error: Not enough arguments provided\n");
+        show_help();
+        return 1;
+    }
+
+    char *inputFname = argv[1];
 
     Image image;
-    load_image(&image, "test.ppm");
+    if (load_image(&image, inputFname) != 0) {
+        fprintf(stderr, "An error occurred loading the specified source file.\n");
+        exit(1);
+    }
 
     GLint program_id;
     GLuint color_slot;
