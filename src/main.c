@@ -29,10 +29,13 @@ typedef struct Image {
 } Image;
 
 /**
- * Shows a help message to the user
+ * Show a simple help message about the usage of this program
  */
 void show_help() {
-    printf("Usage: ppmrw 3|6 input.ppm output.ppm\n");
+    printf("Usage: ezview <input.ppm>\n");
+    printf("\t input.ppm: The input image PPM file\n");
+    printf("\n");
+    printf("\t Example: ezview test.ppm\n");
 }
 
 /**
